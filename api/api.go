@@ -2,6 +2,7 @@ package api
 
 import (
 	"api_gateway/api/handler"
+	"api_gateway/config"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +11,8 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 	api := r.Group("api")
 
-	h := handler.NewHandler()
+	congif := config.Load()
+	h := handler.NewHandler(congif)
 
 	auth := api.Group("auth")
 	auth.POST("/register")
