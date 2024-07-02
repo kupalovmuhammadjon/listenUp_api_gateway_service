@@ -2,15 +2,16 @@ package api
 
 import (
 	"api_gateway/api/handler"
+	"api_gateway/config"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine {
+func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("api")
 
-	h := handler.NewHandler()
+	h := handler.NewHandler(cfg)
 
 	auth := api.Group("auth")
 	auth.POST("/register")
@@ -38,13 +39,13 @@ func NewRouter() *gin.Engine {
 	compositions.POST("/{id}/publish")
 
 	collaborations := api.Group("collaborations")
-	collaborations.POST("/invite")
-	collaborations.PUT("/invite/{id}/respond")
-	compositions.GET("/{id}/collaborators")
-	compositions.PUT("/{id}/collaborators/{id}")
-	compositions.DELETE("/{id}/collaborators/{id}")
-	compositions.POST("/{id}/comments")
-	compositions.GET("/{id}/comments")
+	collaborations.POST("/invite", h.SendInvitation)
+	collaborations.PUT("/invite/{id}/respond", h.RepondInvitation)
+	compositions.GET("/{id}/collaborators", h.GetCollaboratorsByPodcastId)
+	compositions.PUT("/{id}/collaborators/{userId}", h.UpdateCollaboratorByPodcastId)
+	compositions.DELETE("/{id}/collaborators/{id}", h.DeleteCollaboratorByPodcastId)
+	compositions.POST("/{id}/comments", h.CreateCommentByPodcastId)
+	compositions.GET("/{id}/comments", h.GetCommentsByPodcastId)
 
 	discover := api.Group("discover")
 	discover.GET("recommended")

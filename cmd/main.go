@@ -1,8 +1,13 @@
 package main
 
-import "api_gateway/api"
+import (
+	"api_gateway/api"
+	"api_gateway/config"
+)
 
 func main() {
-	router := api.NewRouter()
+	cfg := config.Load()
+	
+	router := api.NewRouter(cfg)
 	router.Run()
 }
