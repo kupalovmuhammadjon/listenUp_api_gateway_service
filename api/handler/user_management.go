@@ -54,14 +54,14 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	void, err := h.ClientUserManagement.UpdateUser(ctx, &user)
+	_, err = h.ClientUserManagement.UpdateUser(ctx, &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to update user")})
 		log.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusNoContent, void)
+	c.JSON(http.StatusNoContent, "User updated successfully")
 }
 
 func (h *Handler) DeleteUser(c *gin.Context) {
@@ -76,14 +76,14 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	void, err := h.ClientUserManagement.DeleteUser(ctx, &pb.ID{Id: id})
+	_, err = h.ClientUserManagement.DeleteUser(ctx, &pb.ID{Id: id})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to delete user")})
 		log.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusNoContent, void)
+	c.JSON(http.StatusNoContent, "User deleted successfully")
 }
 
 func (h *Handler) GetUserProfile(c *gin.Context) {
@@ -128,12 +128,12 @@ func (h *Handler) UpdateUserProfile(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	void, err := h.ClientUserManagement.UpdateUserProfile(ctx, &profile)
+	_, err = h.ClientUserManagement.UpdateUserProfile(ctx, &profile)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to update user profile")})
 		log.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusNoContent, void)
+	c.JSON(http.StatusNoContent, "User profile deleted successfully")
 }
