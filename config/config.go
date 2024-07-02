@@ -14,6 +14,7 @@ type Config struct {
 	COLLABORATIONS_SERVICE_PORT string
 	DISCOVERY_SERVICE_PORT      string
 	PODCAST_SERVICE_PORT        string
+	AUTHENTICATION_SERVICE_PORT string
 }
 
 func Load() *Config {

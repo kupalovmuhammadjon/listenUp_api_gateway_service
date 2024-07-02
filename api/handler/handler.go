@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"api_gateway/config"
 	pbAuthentication "api_gateway/genproto/authentication"
 	pbCollaboration "api_gateway/genproto/collaborations"
 	pbComments "api_gateway/genproto/comments"
@@ -9,6 +10,7 @@ import (
 	pbPodcasts "api_gateway/genproto/podcasts"
 	pbUserManagement "api_gateway/genproto/user"
 	pbUserInteractions "api_gateway/genproto/user_interactions"
+	"api_gateway/pkg"
 )
 
 type Handler struct {
@@ -22,6 +24,16 @@ type Handler struct {
 	ClientUserInteractions pbUserInteractions.UserInteractionsClient
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(cfg *config.Config) *Handler {
+	
+	return &Handler{
+		ClientAuthentication: pkg.NewAuthenticationClient(cfg), 
+		ClientCollaboration:   pkg.NewCollaborationClient(cfg),
+		ClientComments: pkg.NewCommentsClient(cfg),
+		ClientEpisodeMetadata: pkg.NewEpisodeMetadataClient(cfg),
+		ClientEpisodes: pkg.NewEpisodesClient(cfg),
+		ClientPodcasts: pkg.NewPodcastsClient(cfg),
+		ClientUserManagement: pkg.NewUserManagementClient(cfg),
+		ClientUserInteractions: pkg.NewUserInteractionsClient(cfg),
+	}
 }
