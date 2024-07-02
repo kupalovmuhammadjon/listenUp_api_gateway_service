@@ -10,13 +10,7 @@ import (
 func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("api")
-
-<<<<<<< HEAD
 	h := handler.NewHandler(cfg)
-=======
-	congif := config.Load()
-	h := handler.NewHandler(congif)
->>>>>>> origin/main
 
 	auth := api.Group("auth")
 	auth.POST("/register")
