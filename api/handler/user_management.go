@@ -1,7 +1,7 @@
 package handler
 
 import (
-	u "api_gateway/genproto/user"
+	pb "api_gateway/genproto/user"
 	"context"
 	"log"
 	"net/http"
@@ -24,7 +24,7 @@ func (h *Handler) GetUserByID(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	user, err := h.ClientUserManagement.GetUserByID(ctx, &u.ID{Id: id})
+	user, err := h.ClientUserManagement.GetUserByID(ctx, &pb.ID{Id: id})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to get user")})
 		log.Println(err)
@@ -43,7 +43,7 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	var user u.User
+	var user pb.User
 	err = c.ShouldBind(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
@@ -76,7 +76,7 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	void, err := h.ClientUserManagement.DeleteUser(ctx, &u.ID{Id: id})
+	void, err := h.ClientUserManagement.DeleteUser(ctx, &pb.ID{Id: id})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to delete user")})
 		log.Println(err)
@@ -98,7 +98,7 @@ func (h *Handler) GetUserProfile(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
 
-	profile, err := h.ClientUserManagement.GetUserProfile(ctx, &u.ID{Id: id})
+	profile, err := h.ClientUserManagement.GetUserProfile(ctx, &pb.ID{Id: id})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to get user profile")})
 		log.Println(err)
@@ -117,7 +117,7 @@ func (h *Handler) UpdateUserProfile(c *gin.Context) {
 		return
 	}
 
-	var profile u.Profile
+	var profile pb.Profile
 	err = c.ShouldBind(&profile)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
