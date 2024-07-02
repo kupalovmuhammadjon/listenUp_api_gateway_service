@@ -11,7 +11,12 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("api")
 
+<<<<<<< HEAD
 	h := handler.NewHandler(cfg)
+=======
+	congif := config.Load()
+	h := handler.NewHandler(congif)
+>>>>>>> origin/main
 
 	auth := api.Group("auth")
 	auth.POST("/register")
@@ -26,34 +31,35 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	users.GET("/{id}/profile")
 	users.PUT("/{id}/profile")
 
-	compositions := api.Group("compositions")
-	compositions.POST("/")
-	compositions.GET("/{id}")
-	compositions.PUT("/{id}")
-	compositions.DELETE("/{id}")
-	users.GET("/{id}/compositions")
-	compositions.POST("/{id}/tracks")
-	compositions.GET("/{id}/tracks")
-	compositions.PUT("/{id}/tracks/{id}")
-	compositions.DELETE("/{id}/tracks/{id}")
-	compositions.POST("/{id}/publish")
+	podcasts := api.Group("podcasts")
+	podcasts.POST("/", h.CreatePodcast)
+	podcasts.GET("/{id}", h.GetPodcastById)
+	podcasts.PUT("/{id}", h.UpdatePodcast)
+	podcasts.DELETE("/{id}", h.DeletePodcast)
+	users.GET("/{id}/podcasts", h.GetUserPodcasts)
+	podcasts.POST("/{id}/episodes", h.CreatePodcastEpisode)
+	podcasts.GET("/{id}/episodes", h.GetEpisodesByPodcastId)
+	podcasts.PUT("/{id}/episodes/{episodeid}", h.UpdateEpisode)
+	podcasts.DELETE("/{id}/episodes/{episodeid}", h.DeleteEpisode)
+	podcasts.POST("/{id}/publish", h.PublishPodcast)
 
 	collaborations := api.Group("collaborations")
-	collaborations.POST("/invite", h.SendInvitation)
-	collaborations.PUT("/invite/{id}/respond", h.RepondInvitation)
-	compositions.GET("/{id}/collaborators", h.GetCollaboratorsByPodcastId)
-	compositions.PUT("/{id}/collaborators/{userId}", h.UpdateCollaboratorByPodcastId)
-	compositions.DELETE("/{id}/collaborators/{id}", h.DeleteCollaboratorByPodcastId)
-	compositions.POST("/{id}/comments", h.CreateCommentByPodcastId)
-	compositions.GET("/{id}/comments", h.GetCommentsByPodcastId)
+
+	collaborations.POST("/invite")
+	collaborations.PUT("/invite/{id}/respond")
+	podcasts.GET("/{id}/collaborators")
+	podcasts.PUT("/{id}/collaborators/{userid}")
+	podcasts.DELETE("/{id}/collaborators/{userid}")
+	podcasts.POST("/{id}/comments")
+	podcasts.GET("/{id}/comments")
 
 	discover := api.Group("discover")
 	discover.GET("recommended")
 	discover.GET("genres/{genre}")
 	api.GET("search")
-	compositions.POST("/{id}/like")
-	compositions.DELETE("/{id}/like")
-	compositions.POST("/{id}/listen")
+	podcasts.POST("/{id}/like")
+	podcasts.DELETE("/{id}/like")
+	podcasts.POST("/{id}/listen")
 
 	return r
 }

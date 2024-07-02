@@ -2,7 +2,6 @@ package handler
 
 import (
 	pb "api_gateway/genproto/collaborations"
-	"api_gateway/genproto/comments"
 	pbc "api_gateway/genproto/comments"
 	"context"
 	"encoding/json"
@@ -130,7 +129,7 @@ func (h *Handler) UpdateCollaboratorByPodcastId(ctx *gin.Context){
 		return
 	}
 
-	userId := ctx.Param("userId")
+	userId := ctx.Param("userid")
 	_, err = uuid.Parse(userId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
@@ -173,7 +172,7 @@ func (h *Handler) DeleteCollaboratorByPodcastId(ctx *gin.Context){
 		return
 	}
 
-	userId := ctx.Param("userId")
+	userId := ctx.Param("userid")
 	_, err = uuid.Parse(userId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
