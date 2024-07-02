@@ -21,11 +21,11 @@ func NewRouter() *gin.Engine {
 	auth.GET("/refresh-token")
 
 	users := api.Group("users")
-	users.GET("/{id}")
-	users.PUT("/{id}")
-	users.DELETE("/{id}")
-	users.GET("/{id}/profile")
-	users.PUT("/{id}/profile")
+	users.GET("/{id}", h.GetUserByID)
+	users.PUT("/{id}", h.UpdateUser)
+	users.DELETE("/{id}", h.DeleteUser)
+	users.GET("/{id}/profile", h.GetUserProfile)
+	users.PUT("/{id}/profile", h.UpdateUserProfile)
 
 	podcasts := api.Group("podcasts")
 	podcasts.POST("/", h.CreatePodcast)
@@ -49,12 +49,13 @@ func NewRouter() *gin.Engine {
 	podcasts.GET("/{id}/comments")
 
 	discover := api.Group("discover")
-	discover.GET("recommended")
-	discover.GET("genres/{genre}")
-	api.GET("search")
-	podcasts.POST("/{id}/like")
-	podcasts.DELETE("/{id}/like")
-	podcasts.POST("/{id}/listen")
+	discover.GET("trending", h.GetTrendingPodcasts)
+	discover.GET("recommended", h.GetRecommendedPodcasts)
+	discover.GET("genres/{genre}", h.GetPodcastsByGenre)
+	api.GET("search", h.SearchPodcast)
+	podcasts.POST("/{id}/like", h.LikeEpisodeOfPodcast)
+	podcasts.DELETE("/{id}/like", h.DeleteLikeFromEpisodeOfPodcast)
+	podcasts.POST("/{id}/listen", h.ListenEpisodeOfPodcast)
 
 	return r
 }
