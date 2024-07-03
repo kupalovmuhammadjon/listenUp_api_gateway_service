@@ -25,15 +25,15 @@ type Handler struct {
 }
 
 func NewHandler(cfg *config.Config) *Handler {
-	
+
 	return &Handler{
-		ClientAuthentication: pkg.NewAuthenticationClient(cfg), 
-		ClientCollaboration:   pkg.NewCollaborationClient(cfg),
-		ClientComments: pkg.NewCommentsClient(cfg),
-		ClientEpisodeMetadata: pkg.NewEpisodeMetadataClient(cfg),
-		ClientEpisodes: pkg.NewEpisodesClient(cfg),
-		ClientPodcasts: pkg.NewPodcastsClient(cfg),
-		ClientUserManagement: pkg.NewUserManagementClient(cfg),
+		ClientAuthentication:   pkg.NewAuthenticationClient(cfg),
+		ClientCollaboration:    pkg.NewCollaborationClient(cfg),
+		ClientComments:         pkg.NewCommentsClient(cfg),
+		ClientEpisodeMetadata:  pkg.NewEpisodeMetadataClient(cfg),
+		ClientEpisodes:         pkg.NewEpisodesClient(cfg),
+		ClientPodcasts:         pkg.NewPodcastsClient(cfg),
+		ClientUserManagement:   pkg.NewUserManagementClient(cfg),
 		ClientUserInteractions: pkg.NewUserInteractionsClient(cfg),
 	}
 }
