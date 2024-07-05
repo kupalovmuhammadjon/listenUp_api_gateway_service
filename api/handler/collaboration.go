@@ -18,7 +18,7 @@ func (h *Handler) SendInvitation(ctx *gin.Context) {
 	err := json.NewDecoder(ctx.Request.Body).Decode(&invitation)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "Error while decoding",
 		})
 		log.Println("Error while decoding")
@@ -28,7 +28,17 @@ func (h *Handler) SendInvitation(ctx *gin.Context) {
 	tctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	h.ClientCollaboration.CreateInvitation(tctx, &invitation)
+	id, err := h.ClientCollaboration.CreateInvitation(tctx, &invitation)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{
+			"Error":   err.Error(),
+			"Message": "Error while creating invitation",
+		})
+		log.Println("Error while creating invitation ", err)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, id)
 }
 
 func (h *Handler) RepondInvitation(ctx *gin.Context) {
@@ -36,7 +46,7 @@ func (h *Handler) RepondInvitation(ctx *gin.Context) {
 	err := json.NewDecoder(ctx.Request.Body).Decode(&collaboration)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "Error while decoding",
 		})
 		log.Println("Error while decoding ", err)
@@ -48,7 +58,7 @@ func (h *Handler) RepondInvitation(ctx *gin.Context) {
 	_, err = uuid.Parse(id)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "no id or invalid uuid",
 		})
 		log.Println("no id or invalid uuid ", err)
@@ -62,7 +72,7 @@ func (h *Handler) RepondInvitation(ctx *gin.Context) {
 	collabId, err := h.ClientCollaboration.RespondInvitation(tctx, &collaboration)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "Error while responding and creating collaboration ",
 		})
 		log.Println("Error while responding and creating collaboration ", err)
@@ -94,7 +104,7 @@ func (h *Handler) GetCollaboratorsByPodcastId(ctx *gin.Context) {
 	collaborators, err := h.ClientCollaboration.GetCollaboratorsByPodcastId(tctx, &pb.ID{Id: podcastId})
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "Error while getting collaborators by podcast_id",
 		})
 		log.Println("Error while getting collaborators by podcast_id ", err)
@@ -110,7 +120,7 @@ func (h *Handler) UpdateCollaboratorByPodcastId(ctx *gin.Context) {
 	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "Error while decoding",
 		})
 		log.Println("Error while decoding ", err)
@@ -121,7 +131,7 @@ func (h *Handler) UpdateCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err = uuid.Parse(podcastId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "no id or invalid uuid",
 		})
 		log.Println("no id or invalid uuid ", err)
@@ -132,7 +142,7 @@ func (h *Handler) UpdateCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err = uuid.Parse(userId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "no userId or invalid uuid",
 		})
 		log.Println("no userId or invalid uuid ", err)
@@ -148,7 +158,7 @@ func (h *Handler) UpdateCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err = h.ClientCollaboration.UpdateCollaboratorByPodcastId(tctx, req)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "error while updating collaborator by podcastId",
 		})
 		log.Println("error while updating collaborator by podcastId ", err)
@@ -164,7 +174,7 @@ func (h *Handler) DeleteCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err := uuid.Parse(podcastId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "no id or invalid uuid",
 		})
 		log.Println("no id or invalid uuid ", err)
@@ -175,7 +185,7 @@ func (h *Handler) DeleteCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err = uuid.Parse(userId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "no userId or invalid uuid",
 		})
 		log.Println("no userId or invalid uuid ", err)
@@ -191,7 +201,7 @@ func (h *Handler) DeleteCollaboratorByPodcastId(ctx *gin.Context) {
 	_, err = h.ClientCollaboration.DeleteCollaboratorByPodcastId(tctx, req)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
+			"Error":   err.Error(),
 			"Message": "error while deleting collaborator by podcastId",
 		})
 		log.Println("error while deleting collaborator by podcastId ", err)
