@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -80,7 +81,42 @@ func (h *Handler) GetEpisodesByPodcastId(ctx *gin.Context) {
 		return
 	}
 
-	req := pb.ID{Id: id}
+	limit := ctx.Param("limit")
+	offset := ctx.Param("offset")
+	if limit == "" || offset == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "StatusBadRequest",
+			"message": fmt.Errorf("Error with getting limit and offset from URL"),
+		})
+		log.Printf("Error with getting limit and offset from URL")
+		return
+	}
+
+	limitInt, err := strconv.Atoi(limit)
+	if limit == "" || offset == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "StatusBadRequest",
+			"message": fmt.Errorf("Error: limit not in int type: %s", limit),
+		})
+		log.Printf("Error: limit not in int type: %s", limit)
+		return
+	}
+
+	offsetInt, err := strconv.Atoi(offset)
+	if limit == "" || offset == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "StatusBadRequest",
+			"message": fmt.Errorf("Error: limit not in int type: %s", offset),
+		})
+		log.Printf("Error: limit not in int type: %s", offset)
+		return
+	}
+
+	req := pb.Filter{
+		Id:     id,
+		Limit:  int32(limitInt),
+		Offset: int32(offsetInt),
+	}
 
 	nestedctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
@@ -172,35 +208,6 @@ func (h *Handler) DeleteEpisode(ctx *gin.Context) {
 	nestedctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 	resp, err := h.ClientEpisodes.DeleteEpisode(nestedctx, &req)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
-		})
-		log.Printf("Error with request to podcasts service: %s", err)
-		return
-	}
-	ctx.JSON(http.StatusAccepted, resp)
-}
-
-func (h *Handler) PublishPodcast(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if _, err := uuid.Parse(id); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
-		})
-		log.Printf("Error with getting Id from URL: %s", err)
-		return
-	}
-
-	req := pb.ID{
-		Id: id,
-	}
-
-	nestedctx, cancel := context.WithTimeout(ctx, time.Second*5)
-	defer cancel()
-	resp, err := h.ClientEpisodes.PublishPodcast(nestedctx, &req)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",

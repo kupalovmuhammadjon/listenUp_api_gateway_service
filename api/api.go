@@ -41,7 +41,7 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	podcasts.GET("/{id}/comments", h.GetCommentsByPodcastId)
 
 	discover := api.Group("discover")
-	discover.GET("trend", h.GetTrendingPodcasts)
+	discover.GET("trending", h.GetTrendingPodcasts)
 	discover.GET("recommended", h.GetRecommendedPodcasts)
 	discover.GET("genres/{genre}", h.GetPodcastsByGenre)
 	api.GET("search", h.SearchPodcast)
