@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -76,9 +77,48 @@ func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 		log.Println("no id or invalid uuid ", err)
 		return
 	}
-
 	req.Id = podcastId
 
+	l := ctx.Param("limit")
+	if len(l) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"Error":   err,
+			"Message": "no limit in query",
+		})
+		log.Println("no limit in query ", err)
+		return
+	}
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"Error":   err,
+			"Message": "invalid limit in query",
+		})
+		log.Println("invalid limit in query ", err)
+		return
+	}
+	o := ctx.Param("offset")
+	if len(l) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"Error":   err,
+			"Message": "no offset in query",
+		})
+		log.Println("no offset in query ", err)
+		return
+	}
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"Error":   err,
+			"Message": "invalid offset in query",
+		})
+		log.Println("invalid offset in query ", err)
+		return
+	}
+
+	req.Limit = int32(limit)
+	req.Offset = int32(offset)
+	
 	tctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
