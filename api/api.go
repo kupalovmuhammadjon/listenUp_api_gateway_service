@@ -19,11 +19,11 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	auth.GET("/refresh-token")
 
 	users := api.Group("users")
-	users.GET("/{id}")
-	users.PUT("/{id}")
-	users.DELETE("/{id}")
-	users.GET("/{id}/profile")
-	users.PUT("/{id}/profile")
+	users.GET("/{id}", h.GetUserByID)
+	users.PUT("/{id}", h.UpdateUser)
+	users.DELETE("/{id}", h.DeleteUser)
+	users.GET("/{id}/profile", h.GetUserProfile)
+	users.PUT("/{id}/profile", h.UpdateUserProfile)
 
 	podcasts := api.Group("podcasts")
 	podcasts.POST("/", h.CreatePodcast)
@@ -38,22 +38,22 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	podcasts.POST("/{id}/publish", h.PublishPodcast)
 
 	collaborations := api.Group("collaborations")
-
-	collaborations.POST("/invite")
-	collaborations.PUT("/invite/{id}/respond")
-	podcasts.GET("/{id}/collaborators")
-	podcasts.PUT("/{id}/collaborators/{userid}")
-	podcasts.DELETE("/{id}/collaborators/{userid}")
-	podcasts.POST("/{id}/comments")
-	podcasts.GET("/{id}/comments")
+	collaborations.POST("/invite", h.SendInvitation)
+	collaborations.PUT("/invite/{id}/respond", h.RepondInvitation)
+	podcasts.GET("/{id}/collaborators", h.GetCollaboratorsByPodcastId)
+	podcasts.PUT("/{id}/collaborators/{userid}", h.UpdateCollaboratorByPodcastId)
+	podcasts.DELETE("/{id}/collaborators/{userid}", h.DeleteCollaboratorByPodcastId)
+	podcasts.POST("/{id}/comments", h.CreateCommentByPodcastId)
+	podcasts.GET("/{id}/comments", h.GetCommentsByPodcastId)
 
 	discover := api.Group("discover")
-	discover.GET("recommended")
-	discover.GET("genres/{genre}")
-	api.GET("search")
-	podcasts.POST("/{id}/like")
-	podcasts.DELETE("/{id}/like")
-	podcasts.POST("/{id}/listen")
+	discover.GET("trend", h.GetTrendingPodcasts)
+	discover.GET("recommended", h.GetRecommendedPodcasts)
+	discover.GET("genres/{genre}", h.GetPodcastsByGenre)
+	api.GET("search", h.SearchPodcast)
+	podcasts.POST("/{id}/like", h.LikeEpisodeOfPodcast)
+	podcasts.DELETE("/{id}/like", h.DeleteLikeFromEpisodeOfPodcast)
+	podcasts.POST("/{id}/listen", h.ListenEpisodeOfPodcast)
 
 	return r
 }

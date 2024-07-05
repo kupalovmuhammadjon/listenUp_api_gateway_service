@@ -27,6 +27,9 @@ type CollaborationsClient interface {
 	GetCollaboratorsByPodcastId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Collaborators, error)
 	UpdateCollaboratorByPodcastId(ctx context.Context, in *UpdateCollaborator, opts ...grpc.CallOption) (*Void, error)
 	DeleteCollaboratorByPodcastId(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error)
+	GetAllPodcastsUsersWorkedOn(ctx context.Context, in *PodcastsId, opts ...grpc.CallOption) (*PodcastsId, error)
+	ValidateInvitationId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Exists, error)
+	ValidateCollaborationId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Exists, error)
 }
 
 type collaborationsClient struct {
@@ -39,7 +42,7 @@ func NewCollaborationsClient(cc grpc.ClientConnInterface) CollaborationsClient {
 
 func (c *collaborationsClient) CreateInvitation(ctx context.Context, in *CreateInvite, opts ...grpc.CallOption) (*ID, error) {
 	out := new(ID)
-	err := c.cc.Invoke(ctx, "/Collaborations/CreateInvitation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/CreateInvitation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +51,7 @@ func (c *collaborationsClient) CreateInvitation(ctx context.Context, in *CreateI
 
 func (c *collaborationsClient) RespondInvitation(ctx context.Context, in *CreateCollaboration, opts ...grpc.CallOption) (*ID, error) {
 	out := new(ID)
-	err := c.cc.Invoke(ctx, "/Collaborations/RespondInvitation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/RespondInvitation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +60,7 @@ func (c *collaborationsClient) RespondInvitation(ctx context.Context, in *Create
 
 func (c *collaborationsClient) GetCollaboratorsByPodcastId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Collaborators, error) {
 	out := new(Collaborators)
-	err := c.cc.Invoke(ctx, "/Collaborations/GetCollaboratorsByPodcastId", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/GetCollaboratorsByPodcastId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +69,7 @@ func (c *collaborationsClient) GetCollaboratorsByPodcastId(ctx context.Context, 
 
 func (c *collaborationsClient) UpdateCollaboratorByPodcastId(ctx context.Context, in *UpdateCollaborator, opts ...grpc.CallOption) (*Void, error) {
 	out := new(Void)
-	err := c.cc.Invoke(ctx, "/Collaborations/UpdateCollaboratorByPodcastId", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/UpdateCollaboratorByPodcastId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +78,34 @@ func (c *collaborationsClient) UpdateCollaboratorByPodcastId(ctx context.Context
 
 func (c *collaborationsClient) DeleteCollaboratorByPodcastId(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error) {
 	out := new(Void)
-	err := c.cc.Invoke(ctx, "/Collaborations/DeleteCollaboratorByPodcastId", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/DeleteCollaboratorByPodcastId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationsClient) GetAllPodcastsUsersWorkedOn(ctx context.Context, in *PodcastsId, opts ...grpc.CallOption) (*PodcastsId, error) {
+	out := new(PodcastsId)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/GetAllPodcastsUsersWorkedOn", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationsClient) ValidateInvitationId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Exists, error) {
+	out := new(Exists)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/ValidateInvitationId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationsClient) ValidateCollaborationId(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Exists, error) {
+	out := new(Exists)
+	err := c.cc.Invoke(ctx, "/collaborations.Collaborations/ValidateCollaborationId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -91,6 +121,9 @@ type CollaborationsServer interface {
 	GetCollaboratorsByPodcastId(context.Context, *ID) (*Collaborators, error)
 	UpdateCollaboratorByPodcastId(context.Context, *UpdateCollaborator) (*Void, error)
 	DeleteCollaboratorByPodcastId(context.Context, *Ids) (*Void, error)
+	GetAllPodcastsUsersWorkedOn(context.Context, *PodcastsId) (*PodcastsId, error)
+	ValidateInvitationId(context.Context, *ID) (*Exists, error)
+	ValidateCollaborationId(context.Context, *ID) (*Exists, error)
 	mustEmbedUnimplementedCollaborationsServer()
 }
 
@@ -112,6 +145,15 @@ func (UnimplementedCollaborationsServer) UpdateCollaboratorByPodcastId(context.C
 }
 func (UnimplementedCollaborationsServer) DeleteCollaboratorByPodcastId(context.Context, *Ids) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCollaboratorByPodcastId not implemented")
+}
+func (UnimplementedCollaborationsServer) GetAllPodcastsUsersWorkedOn(context.Context, *PodcastsId) (*PodcastsId, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllPodcastsUsersWorkedOn not implemented")
+}
+func (UnimplementedCollaborationsServer) ValidateInvitationId(context.Context, *ID) (*Exists, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateInvitationId not implemented")
+}
+func (UnimplementedCollaborationsServer) ValidateCollaborationId(context.Context, *ID) (*Exists, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateCollaborationId not implemented")
 }
 func (UnimplementedCollaborationsServer) mustEmbedUnimplementedCollaborationsServer() {}
 
@@ -136,7 +178,7 @@ func _Collaborations_CreateInvitation_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Collaborations/CreateInvitation",
+		FullMethod: "/collaborations.Collaborations/CreateInvitation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CollaborationsServer).CreateInvitation(ctx, req.(*CreateInvite))
@@ -154,7 +196,7 @@ func _Collaborations_RespondInvitation_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Collaborations/RespondInvitation",
+		FullMethod: "/collaborations.Collaborations/RespondInvitation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CollaborationsServer).RespondInvitation(ctx, req.(*CreateCollaboration))
@@ -172,7 +214,7 @@ func _Collaborations_GetCollaboratorsByPodcastId_Handler(srv interface{}, ctx co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Collaborations/GetCollaboratorsByPodcastId",
+		FullMethod: "/collaborations.Collaborations/GetCollaboratorsByPodcastId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CollaborationsServer).GetCollaboratorsByPodcastId(ctx, req.(*ID))
@@ -190,7 +232,7 @@ func _Collaborations_UpdateCollaboratorByPodcastId_Handler(srv interface{}, ctx 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Collaborations/UpdateCollaboratorByPodcastId",
+		FullMethod: "/collaborations.Collaborations/UpdateCollaboratorByPodcastId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CollaborationsServer).UpdateCollaboratorByPodcastId(ctx, req.(*UpdateCollaborator))
@@ -208,10 +250,64 @@ func _Collaborations_DeleteCollaboratorByPodcastId_Handler(srv interface{}, ctx 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Collaborations/DeleteCollaboratorByPodcastId",
+		FullMethod: "/collaborations.Collaborations/DeleteCollaboratorByPodcastId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CollaborationsServer).DeleteCollaboratorByPodcastId(ctx, req.(*Ids))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Collaborations_GetAllPodcastsUsersWorkedOn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PodcastsId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollaborationsServer).GetAllPodcastsUsersWorkedOn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/collaborations.Collaborations/GetAllPodcastsUsersWorkedOn",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollaborationsServer).GetAllPodcastsUsersWorkedOn(ctx, req.(*PodcastsId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Collaborations_ValidateInvitationId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollaborationsServer).ValidateInvitationId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/collaborations.Collaborations/ValidateInvitationId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollaborationsServer).ValidateInvitationId(ctx, req.(*ID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Collaborations_ValidateCollaborationId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollaborationsServer).ValidateCollaborationId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/collaborations.Collaborations/ValidateCollaborationId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollaborationsServer).ValidateCollaborationId(ctx, req.(*ID))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -220,7 +316,7 @@ func _Collaborations_DeleteCollaboratorByPodcastId_Handler(srv interface{}, ctx 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Collaborations_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Collaborations",
+	ServiceName: "collaborations.Collaborations",
 	HandlerType: (*CollaborationsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -242,6 +338,18 @@ var Collaborations_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCollaboratorByPodcastId",
 			Handler:    _Collaborations_DeleteCollaboratorByPodcastId_Handler,
+		},
+		{
+			MethodName: "GetAllPodcastsUsersWorkedOn",
+			Handler:    _Collaborations_GetAllPodcastsUsersWorkedOn_Handler,
+		},
+		{
+			MethodName: "ValidateInvitationId",
+			Handler:    _Collaborations_ValidateInvitationId_Handler,
+		},
+		{
+			MethodName: "ValidateCollaborationId",
+			Handler:    _Collaborations_ValidateCollaborationId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
