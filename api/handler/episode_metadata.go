@@ -16,13 +16,15 @@ import (
 func (h *Handler) GetTrendingPodcasts(c *gin.Context) {
 	limit, err := strconv.Atoi(c.Query("limit"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
 	offset, err := strconv.Atoi(c.Query("offset"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
@@ -35,7 +37,8 @@ func (h *Handler) GetTrendingPodcasts(c *gin.Context) {
 		Offset: int64(offset),
 	})
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to get trending podcasts")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError,
+			gin.H{"error": errors.Wrap(err, "failed to get trending podcasts").Error()})
 		log.Println(err)
 		return
 	}
@@ -44,22 +47,24 @@ func (h *Handler) GetTrendingPodcasts(c *gin.Context) {
 }
 
 func (h *Handler) GetRecommendedPodcasts(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("userid")
 	_, err := uuid.Parse(id)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid user id")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid user id").Error()})
 		log.Println(err)
 		return
 	}
 	limit, err := strconv.Atoi(c.Query("limit"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
 	offset, err := strconv.Atoi(c.Query("offset"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
@@ -72,7 +77,8 @@ func (h *Handler) GetRecommendedPodcasts(c *gin.Context) {
 		Pagination: &pb.Pagination{Limit: int64(limit), Offset: int64(offset)},
 	})
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to get recommended podcasts")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError,
+			gin.H{"error": errors.Wrap(err, "failed to get recommended podcasts").Error()})
 		log.Println(err)
 		return
 	}
@@ -84,13 +90,15 @@ func (h *Handler) GetPodcastsByGenre(c *gin.Context) {
 	genres := c.QueryArray("genres")
 	limit, err := strconv.Atoi(c.Query("limit"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
 	offset, err := strconv.Atoi(c.Query("offset"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid pagination parameters")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
 		log.Println(err)
 		return
 	}
@@ -103,7 +111,8 @@ func (h *Handler) GetPodcastsByGenre(c *gin.Context) {
 		Pagination: &pb.Pagination{Limit: int64(limit), Offset: int64(offset)},
 	})
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to get podcasts by genre")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError,
+			gin.H{"error": errors.Wrap(err, "failed to get podcasts by genre").Error()})
 		log.Println(err)
 		return
 	}
@@ -115,7 +124,8 @@ func (h *Handler) SearchPodcast(c *gin.Context) {
 	var title pb.Title
 	err := c.ShouldBind(&title)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid data").Error()})
 		log.Println(err)
 		return
 	}
@@ -125,7 +135,8 @@ func (h *Handler) SearchPodcast(c *gin.Context) {
 
 	episode, err := h.ClientEpisodeMetadata.SearchEpisode(ctx, &title)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to find episode")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError,
+			gin.H{"error": errors.Wrap(err, "failed to find episode").Error()})
 		log.Println(err)
 		return
 	}
