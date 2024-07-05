@@ -57,18 +57,9 @@ func (h *Handler) CreateCommentByPodcastId(ctx *gin.Context) {
 func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 
 	req := &pbc.CommentFilter{}
-	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
-	if err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
-			"Message": "Error while decoding",
-		})
-		log.Println("Error while decoding ", err)
-		return
-	}
 
 	podcastId := ctx.Param("id")
-	_, err = uuid.Parse(podcastId)
+	_, err := uuid.Parse(podcastId)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
 			"Error":   err,
@@ -88,6 +79,7 @@ func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 		log.Println("no limit in query ", err)
 		return
 	}
+
 	limit, err := strconv.Atoi(l)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -97,6 +89,7 @@ func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 		log.Println("invalid limit in query ", err)
 		return
 	}
+
 	o := ctx.Param("offset")
 	if len(l) == 0 {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -118,7 +111,7 @@ func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 
 	req.Limit = int32(limit)
 	req.Offset = int32(offset)
-	
+
 	tctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
