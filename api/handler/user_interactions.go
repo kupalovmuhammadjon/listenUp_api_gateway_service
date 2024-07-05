@@ -15,7 +15,7 @@ func (h *Handler) LikeEpisodeOfPodcast(c *gin.Context) {
 	var interaction pb.InteractEpisode
 	err := c.ShouldBind(&interaction)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data").Error()})
 		log.Println(err)
 		return
 	}
@@ -25,7 +25,7 @@ func (h *Handler) LikeEpisodeOfPodcast(c *gin.Context) {
 
 	id, err := h.ClientUserInteractions.LikeEpisodeOfPodcast(ctx, &interaction)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to like episode")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to like episode").Error()})
 		log.Println(err)
 		return
 	}
@@ -37,7 +37,7 @@ func (h *Handler) DeleteLikeFromEpisodeOfPodcast(c *gin.Context) {
 	var ids pb.DeleteLike
 	err := c.ShouldBind(&ids)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data").Error()})
 		log.Println(err)
 		return
 	}
@@ -47,7 +47,7 @@ func (h *Handler) DeleteLikeFromEpisodeOfPodcast(c *gin.Context) {
 
 	success, err := h.ClientUserInteractions.DeleteLikeFromEpisodeOfPodcast(ctx, &ids)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to dislike episode")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to dislike episode").Error()})
 		log.Println(err)
 		return
 	}
@@ -59,7 +59,7 @@ func (h *Handler) ListenEpisodeOfPodcast(c *gin.Context) {
 	var interaction pb.InteractEpisode
 	err := c.ShouldBind(&interaction)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data")})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors.Wrap(err, "invalid data").Error()})
 		log.Println(err)
 		return
 	}
@@ -69,7 +69,7 @@ func (h *Handler) ListenEpisodeOfPodcast(c *gin.Context) {
 
 	id, err := h.ClientUserInteractions.ListenEpisodeOfPodcast(ctx, &interaction)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to listen to episode")})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": errors.Wrap(err, "failed to listen to episode").Error()})
 		log.Println(err)
 		return
 	}

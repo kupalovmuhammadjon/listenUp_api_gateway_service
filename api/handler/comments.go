@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 )
 
 func (h *Handler) CreateCommentByPodcastId(ctx *gin.Context) {
@@ -70,42 +71,18 @@ func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 	}
 	req.Id = podcastId
 
-	l := ctx.Param("limit")
-	if len(l) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
-			"Message": "no limit in query",
-		})
-		log.Println("no limit in query ", err)
-		return
-	}
-
-	limit, err := strconv.Atoi(l)
+	limit, err := strconv.Atoi(ctx.Query("limit"))
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
-			"Message": "invalid limit in query",
-		})
-		log.Println("invalid limit in query ", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
+		log.Println(err)
 		return
 	}
-
-	o := ctx.Param("offset")
-	if len(l) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
-			"Message": "no offset in query",
-		})
-		log.Println("no offset in query ", err)
-		return
-	}
-	offset, err := strconv.Atoi(o)
+	offset, err := strconv.Atoi(ctx.Query("offset"))
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"Error":   err,
-			"Message": "invalid offset in query",
-		})
-		log.Println("invalid offset in query ", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid pagination parameters").Error()})
+		log.Println(err)
 		return
 	}
 
