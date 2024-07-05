@@ -9,5 +9,5 @@ func main() {
 	cfg := config.Load()
 	
 	router := api.NewRouter(cfg)
-	router.Run()
+	router.Run(cfg.HTTP_PORT)
 }
