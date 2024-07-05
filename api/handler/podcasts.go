@@ -21,9 +21,9 @@ func (h *Handler) CreatePodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting data from URL body: %s", err),
+			"message": fmt.Sprintf("Error with getting data from URL body: %s", err.Error()),
 		})
-		log.Printf("Error with getting data from URL body: %s", err)
+		log.Printf("Error with getting data from URL body: %s", err.Error())
 		return
 	}
 	nestedctx, cancel := context.WithTimeout(ctx, time.Second*5)
@@ -32,9 +32,9 @@ func (h *Handler) CreatePodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
@@ -45,9 +45,9 @@ func (h *Handler) GetPodcastById(ctx *gin.Context) {
 	if _, err := uuid.Parse(id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
+			"message": fmt.Sprintf("Error with getting Id from URL: %s", err.Error()),
 		})
-		log.Printf("Error with getting Id from URL: %s", err)
+		log.Printf("Error with getting Id from URL: %s", err.Error())
 		return
 	}
 	req := pb.ID{Id: id}
@@ -58,9 +58,9 @@ func (h *Handler) GetPodcastById(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
@@ -71,9 +71,9 @@ func (h *Handler) UpdatePodcast(ctx *gin.Context) {
 	if _, err := uuid.Parse(id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
+			"message": fmt.Sprintf("Error with getting Id from URL: %s", err.Error()),
 		})
-		log.Printf("Error with getting Id from URL: %s", err)
+		log.Printf("Error with getting Id from URL: %s", err.Error())
 		return
 	}
 	req := pb.PodcastUpdate{}
@@ -81,9 +81,9 @@ func (h *Handler) UpdatePodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting data from URL body: %s", err),
+			"message": fmt.Sprintf("Error with getting data from URL body: %s", err.Error()),
 		})
-		log.Printf("Error with getting data from URL body: %s", err)
+		log.Printf("Error with getting data from URL body: %s", err.Error())
 		return
 	}
 	req.Id = id
@@ -94,9 +94,9 @@ func (h *Handler) UpdatePodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
@@ -107,9 +107,9 @@ func (h *Handler) DeletePodcast(ctx *gin.Context) {
 	if _, err := uuid.Parse(id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
+			"message": fmt.Sprintf("Error with getting Id from URL: %s", err.Error()),
 		})
-		log.Printf("Error with getting Id from URL: %s", err)
+		log.Printf("Error with getting Id from URL: %s", err.Error())
 		return
 	}
 	req := pb.ID{Id: id}
@@ -120,9 +120,9 @@ func (h *Handler) DeletePodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
@@ -133,9 +133,9 @@ func (h *Handler) GetUserPodcasts(ctx *gin.Context) {
 	if _, err := uuid.Parse(id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
+			"message": fmt.Sprintf("Error with getting Id from URL: %s", err.Error()),
 		})
-		log.Printf("Error with getting Id from URL: %s", err)
+		log.Printf("Error with getting Id from URL: %s", err.Error())
 		return
 	}
 
@@ -144,7 +144,7 @@ func (h *Handler) GetUserPodcasts(ctx *gin.Context) {
 	if limit == "" || offset == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Errorf("Error with getting limit and offset from URL"),
+			"message": fmt.Errorf("error with getting limit and offset from URL"),
 		})
 		log.Printf("Error with getting limit and offset from URL")
 		return
@@ -154,7 +154,7 @@ func (h *Handler) GetUserPodcasts(ctx *gin.Context) {
 	if limit == "" || offset == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Errorf("Error: limit not in int type: %s", limit),
+			"message": fmt.Errorf("error: limit not in int type: %s", limit),
 		})
 		log.Printf("Error: limit not in int type: %s", limit)
 		return
@@ -182,9 +182,9 @@ func (h *Handler) GetUserPodcasts(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
@@ -195,9 +195,9 @@ func (h *Handler) PublishPodcast(ctx *gin.Context) {
 	if _, err := uuid.Parse(id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "StatusBadRequest",
-			"message": fmt.Sprintf("Error with getting Id from URL: %s", err),
+			"message": fmt.Sprintf("Error with getting Id from URL: %s", err.Error()),
 		})
-		log.Printf("Error with getting Id from URL: %s", err)
+		log.Printf("Error with getting Id from URL: %s", err.Error())
 		return
 	}
 
@@ -211,9 +211,9 @@ func (h *Handler) PublishPodcast(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "StatusInternalServerError",
-			"message": fmt.Sprintf("Error with request to podcasts service: %s", err),
+			"message": fmt.Sprintf("Error with request to podcasts service: %s", err.Error()),
 		})
-		log.Printf("Error with request to podcasts service: %s", err)
+		log.Printf("Error with request to podcasts service: %s", err.Error())
 		return
 	}
 	ctx.JSON(http.StatusAccepted, resp)
