@@ -30,7 +30,7 @@ func NewAuthenticationClient(cfg *config.Config) pbAuthentication.Authentication
 }
 
 func NewCollaborationClient(cfg *config.Config) pbCollaboration.CollaborationsClient{
-	conn, err := grpc.NewClient(cfg.COLLABORATIONS_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.COLLABORATIONS_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -42,7 +42,7 @@ func NewCollaborationClient(cfg *config.Config) pbCollaboration.CollaborationsCl
 }
 
 func NewCommentsClient(cfg *config.Config) pbComments.CommentsClient{
-	conn, err := grpc.NewClient(cfg.COLLABORATIONS_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.COLLABORATIONS_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -54,7 +54,7 @@ func NewCommentsClient(cfg *config.Config) pbComments.CommentsClient{
 }
 
 func NewEpisodeMetadataClient(cfg *config.Config) pbEpisodeMetadata.EpisodeMetadataClient{
-	conn, err := grpc.NewClient(cfg.DISCOVERY_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.DISCOVERY_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -66,7 +66,7 @@ func NewEpisodeMetadataClient(cfg *config.Config) pbEpisodeMetadata.EpisodeMetad
 }
 
 func NewUserInteractionsClient(cfg *config.Config) pbUserInteractions.UserInteractionsClient{
-	conn, err := grpc.NewClient(cfg.DISCOVERY_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.DISCOVERY_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -78,7 +78,7 @@ func NewUserInteractionsClient(cfg *config.Config) pbUserInteractions.UserIntera
 }
 
 func NewEpisodesClient(cfg *config.Config) pbEpisodes.EpisodesServiceClient{
-	conn, err := grpc.NewClient(cfg.PODCAST_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.PODCAST_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -91,7 +91,7 @@ func NewEpisodesClient(cfg *config.Config) pbEpisodes.EpisodesServiceClient{
 
 
 func NewPodcastsClient(cfg *config.Config) pbPodcasts.PodcastsClient{
-	conn, err := grpc.NewClient(cfg.PODCAST_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.PODCAST_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
@@ -103,7 +103,7 @@ func NewPodcastsClient(cfg *config.Config) pbPodcasts.PodcastsClient{
 }
 
 func NewUserManagementClient(cfg *config.Config) pbUserManagement.UserManagementClient{
-	conn, err := grpc.NewClient(cfg.USER_SERVICE_PORT, 
+	conn, err := grpc.NewClient("localhost"+cfg.USER_SERVICE_PORT, 
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
