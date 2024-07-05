@@ -12,12 +12,6 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	api := r.Group("api")
 	h := handler.NewHandler(cfg)
 
-	auth := api.Group("auth")
-	auth.POST("/register")
-	auth.POST("/login")
-	auth.POST("/logout")
-	auth.GET("/refresh-token")
-
 	users := api.Group("users")
 	users.GET("/{id}", h.GetUserByID)
 	users.PUT("/{id}", h.UpdateUser)

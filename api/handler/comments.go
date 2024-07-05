@@ -55,7 +55,7 @@ func (h *Handler) CreateCommentByPodcastId(ctx *gin.Context) {
 
 func (h *Handler) GetCommentsByPodcastId(ctx *gin.Context) {
 
-	req := &pbc.ID{}
+	req := &pbc.CommentFilter{}
 	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{
