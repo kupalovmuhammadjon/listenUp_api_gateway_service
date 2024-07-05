@@ -7,12 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine {
+func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("api")
-
-	congif := config.Load()
-	h := handler.NewHandler(congif)
+	h := handler.NewHandler(cfg)
 
 	auth := api.Group("auth")
 	auth.POST("/register")
@@ -40,13 +38,13 @@ func NewRouter() *gin.Engine {
 	podcasts.POST("/{id}/publish", h.PublishPodcast)
 
 	collaborations := api.Group("collaborations")
-	collaborations.POST("/invite")
-	collaborations.PUT("/invite/{id}/respond")
-	podcasts.GET("/{id}/collaborators")
-	podcasts.PUT("/{id}/collaborators/{userid}")
-	podcasts.DELETE("/{id}/collaborators/{userid}")
-	podcasts.POST("/{id}/comments")
-	podcasts.GET("/{id}/comments")
+	collaborations.POST("/invite", h.SendInvitation)
+	collaborations.PUT("/invite/{id}/respond", h.RepondInvitation)
+	podcasts.GET("/{id}/collaborators", h.GetCollaboratorsByPodcastId)
+	podcasts.PUT("/{id}/collaborators/{userid}", h.UpdateCollaboratorByPodcastId)
+	podcasts.DELETE("/{id}/collaborators/{userid}", h.DeleteCollaboratorByPodcastId)
+	podcasts.POST("/{id}/comments", h.CreateCommentByPodcastId)
+	podcasts.GET("/{id}/comments", h.GetCommentsByPodcastId)
 
 	discover := api.Group("discover")
 	discover.GET("trending", h.GetTrendingPodcasts)
