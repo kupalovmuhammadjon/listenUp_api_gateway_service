@@ -12,7 +12,7 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("/listenup")
 	api.Use(middleware.JWTMiddleware())
-	
+
 	h := handler.NewHandler(cfg)
 
 	users := api.Group("/users")
@@ -45,7 +45,7 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 
 	discover := api.Group("/discover")
 	discover.GET("/trending", h.GetTrendingPodcasts)
-	discover.GET("/recommended", h.GetRecommendedPodcasts)
+	discover.GET("/recommended/:userid", h.GetRecommendedPodcasts)
 	discover.GET("/genres", h.GetPodcastsByGenre)
 	api.GET("/search", h.SearchPodcast)
 	podcasts.POST("/:id/like", h.LikeEpisodeOfPodcast)
