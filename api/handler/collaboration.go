@@ -4,6 +4,7 @@ import (
 	pb "api_gateway/genproto/collaborations"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -65,7 +66,7 @@ func (h *Handler) RepondInvitation(ctx *gin.Context) {
 		return
 	}
 	collaboration.InvitationId = id
-
+	fmt.Println(collaboration)
 	tctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

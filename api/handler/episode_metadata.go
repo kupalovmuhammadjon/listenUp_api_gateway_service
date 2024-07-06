@@ -122,7 +122,7 @@ func (h *Handler) GetPodcastsByGenre(c *gin.Context) {
 
 func (h *Handler) SearchPodcast(c *gin.Context) {
 	var title pb.Title
-	err := c.ShouldBind(&title)
+	err := c.BindJSON(&title)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
 			gin.H{"error": errors.Wrap(err, "invalid data").Error()})

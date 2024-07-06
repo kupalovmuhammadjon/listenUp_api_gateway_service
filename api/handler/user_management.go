@@ -13,7 +13,7 @@ import (
 )
 
 func (h *Handler) GetUserByID(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("id")
 	_, err := uuid.Parse(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
@@ -37,7 +37,7 @@ func (h *Handler) GetUserByID(c *gin.Context) {
 }
 
 func (h *Handler) UpdateUser(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("id")
 	_, err := uuid.Parse(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
@@ -70,7 +70,7 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 }
 
 func (h *Handler) DeleteUser(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("id")
 	_, err := uuid.Parse(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
@@ -94,7 +94,7 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 }
 
 func (h *Handler) GetUserProfile(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("id")
 	_, err := uuid.Parse(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
@@ -118,8 +118,17 @@ func (h *Handler) GetUserProfile(c *gin.Context) {
 }
 
 func (h *Handler) UpdateUserProfile(c *gin.Context) {
-	id := c.Param("user_id")
-	_, err := uuid.Parse(id)
+	var profile pb.Profile
+	err := c.BindJSON(&profile)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": errors.Wrap(err, "invalid data").Error()})
+		log.Println(err)
+		return
+	}
+
+	id := c.Param("id")
+	_, err = uuid.Parse(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
 			gin.H{"error": errors.Wrap(err, "invalid user id").Error()})
@@ -127,14 +136,7 @@ func (h *Handler) UpdateUserProfile(c *gin.Context) {
 		return
 	}
 
-	var profile pb.Profile
-	err = c.ShouldBind(&profile)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": errors.Wrap(err, "invalid data").Error()})
-		log.Println(err)
-		return
-	}
+	profile.UserId = id
 
 	ctx, cancel := context.WithTimeout(c, time.Second*5)
 	defer cancel()
