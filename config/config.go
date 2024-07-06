@@ -15,6 +15,7 @@ type Config struct {
 	DISCOVERY_SERVICE_PORT      string
 	PODCAST_SERVICE_PORT        string
 	AUTHENTICATION_SERVICE_PORT string
+	SIGNING_KEY                 string
 }
 
 func Load() *Config {
@@ -30,6 +31,7 @@ func Load() *Config {
 	cfg.COLLABORATIONS_SERVICE_PORT = cast.ToString(coalesce("COLLABORATIONS_SERVICE_PORT", ":8082"))
 	cfg.DISCOVERY_SERVICE_PORT = cast.ToString(coalesce("DISCOVERY_SERVICE_PORT", ":8083"))
 	cfg.PODCAST_SERVICE_PORT = cast.ToString(coalesce("PODCAST_SERVICE_PORT", ":8084"))
+	cfg.SIGNING_KEY = cast.ToString(coalesce("SIGNING_KEY", "just do it"))
 
 	return &cfg
 }

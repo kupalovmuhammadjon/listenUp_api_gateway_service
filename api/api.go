@@ -2,6 +2,7 @@ package api
 
 import (
 	"api_gateway/api/handler"
+	"api_gateway/api/middleware"
 	"api_gateway/config"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,8 @@ import (
 func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("/listenup")
+	api.Use(middleware.JWTMiddleware())
+	
 	h := handler.NewHandler(cfg)
 
 	users := api.Group("/users")
