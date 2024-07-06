@@ -1,15 +1,18 @@
 package api
 
 import (
-  "api_gateway/api/handler"
-  "api_gateway/config"
+	"api_gateway/api/handler"
+	"api_gateway/api/middleware"
+	"api_gateway/config"
 
-  "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func NewRouter(cfg *config.Config) *gin.Engine {
 	r := gin.Default()
 	api := r.Group("/listenup")
+	api.Use(middleware.JWTMiddleware())
+
 	h := handler.NewHandler(cfg)
 
 	users := api.Group("/users")
@@ -49,5 +52,5 @@ func NewRouter(cfg *config.Config) *gin.Engine {
 	podcasts.DELETE("/:id/like", h.DeleteLikeFromEpisodeOfPodcast)
 	podcasts.POST("/:id/listen", h.ListenEpisodeOfPodcast)
 
-  return r
+	return r
 }
